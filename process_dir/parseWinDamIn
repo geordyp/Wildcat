@@ -1,0 +1,153 @@
+#!/usr/bin/perl
+#
+# ______________________________________________________________________
+
+# Check for correct number of command line arguments and store the filenames.
+if( @ARGV != 2 ) {
+  print STDERR "Usage: parseOut DIS_file results.out\n";
+  exit(-1);
+}
+$dis_file   = $ARGV[0]; # SITES summary file
+$new_file   = $ARGV[1]; # new results file
+
+# Regular expressions for numeric fields
+$e  = "-?(?:\\d+\\.?\\d*|\\.\\d+)[eEdD](?:\\+|-)?\\d+"; # exponential notation
+$f  = "-?\\d+\\.\\d*|-?\\.\\d+";                        # floating point
+$i  = "-?\\d+";                                         # integer
+$ui = "\\d+";                                           # unsigned integer
+# Note: these should be protected within () due to OR's
+$v  = "$e|$f|$i";       # value (numeric field: exponential, float, or int)
+$t  = "\\w+(?::\\w+)*"; # tag (colon separated alphanumeric blocks:)
+
+################################
+# Process DIS parameters file
+################################
+
+# Open parameters file for input.
+open (DIS_PARAMS, "<$dis_file") || die "Can't open $dis_file: $!";
+# Open the new simulation file for output.
+open (NEW_SIMULATION, ">$new_file") || die "Can't create $new_file: $!";
+
+$i=0;
+$x="";
+$n=0;
+
+while (<DIS_PARAMS>) { # read each line of file, one at a time
+  chomp;
+  $i++;
+  @input = map { split('\s+', $_) } $_;
+  shift(@input);
+  if ($i==1) {
+    $n = shift(@input);
+    print "$n\n";
+  }
+  if (($i>1)&&($i<=1+$n)) {
+    $x = shift(@input);
+    $y = sprintf("%09.4f", $x);
+    $z = shift(@input);
+    print NEW_SIMULATION "      $y $z\n";
+    print "      $y $z\n";
+  }
+  else {
+    print NEW_SIMULATION "$_\n";
+  }
+}
+close (DIS_PARAMS);
+close (NEW_SIMULATION);
+
+##########################################
+# End script, begin subroutine definitions
+##########################################
+
+# Intrinsic numeric operators include +,-,*,/,**,%,<<,>>,sqrt(),abs(),
+# sin(),cos(),atan2(),exp(),log(),int(),hex(),oct(),rand(),srand().
+
+# Augment these with others (adapted/extended from bprepro by Bob Walton).
+# NOTE: convert from degs to rads by pi/180 = (pi/4)/45 = atan2(1,1)/45
+#       convert from rads to degs by 180/pi = 45/atan2(1,1)
+
+# additional logarithmic functions
+
+sub log10 { log($_[0])/log(10) }
+
+# additional trigonometric functions with radian input
+
+sub tan { sin($_[0])/cos($_[0]) }
+
+sub cot { cos($_[0])/sin($_[0]) }
+
+sub csc { 1/sin($_[0]) }
+
+sub sec { 1/cos($_[0]) }
+
+# trigonometric functions with degree input
+
+sub sind { sin($_[0]*atan2(1,1)/45) }
+
+sub cosd { cos($_[0]*atan2(1,1)/45) }
+
+sub tand { tan($_[0]*atan2(1,1)/45) }
+
+sub cotd { cot($_[0]*atan2(1,1)/45) }
+
+sub cscd { 1/sin($_[0]*atan2(1,1)/45) }
+
+sub secd { 1/cos($_[0]*atan2(1,1)/45) }
+
+# inverse trigonometric functions returning radians
+
+sub asin {
+  if (abs($_[0]) > 1) { die "input out of range in asin()\n"; }
+  atan2($_[0],sqrt(1-$_[0]**2));
+}
+
+sub acos {
+  if (abs($_[0]) > 1) { die "input out of range in acos()\n"; }
+  atan2(sqrt(1-$_[0]**2),$_[0]);
+}
+
+sub atan { atan2($_[0],1) }
+
+# inverse trigonometric functions returning degrees
+
+sub asind { asin($_[0])*45/atan2(1,1) }
+
+sub acosd { acos($_[0])*45/atan2(1,1) }
+
+sub atand { atan2($_[0],1)*45/atan2(1,1) }
+
+sub atan2d { atan2($_[0],$_[1])*45/atan2(1,1) }
+
+# hyperbolic functions
+
+sub sinh { (exp($_[0]) - exp(-$_[0]))/2 }
+
+sub cosh { (exp($_[0]) + exp(-$_[0]))/2 }
+
+sub tanh { sinh($_[0])/cosh($_[0]) }
+
+sub coth {
+  if ($_[0] == 0) { die "input out of range in coth()\n"; }
+  cosh($_[0])/sinh($_[0]);
+}
+
+sub csch {
+  if ($_[0] == 0) { die "input out of range in csch()\n"; }
+  1/sinh($_[0]);
+}
+
+sub sech { 1/cosh($_[0]) }
+
+# inverse hyperbolic functions
+
+sub asinh { log($_[0] + sqrt($_[0]**2 + 1)) }
+
+sub acosh {
+  if ($_[0] < 1) { die "input out of range in acosh()\n"; }
+  log($_[0] + sqrt($_[0]**2 - 1));
+}
+
+sub atanh {
+  if (abs($_[0]) >= 1) { die "input out of range in atanh()\n"; }
+  log((1+$_[0])/(1-$_[0]))/2;
+}

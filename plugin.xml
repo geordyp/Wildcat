@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         id="application"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="edu.ksu.wildcat.Application">
+         </run>
+      </application>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            name="RCP Perspective"
+            class="edu.ksu.wildcat.Perspective"
+            id="edu.ksu.wildcat.perspective">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+      	defaultHandler="edu.ksu.wildcat.handlers.FileOpen"
+      	description="Opens file"
+      	id="edu.ksu.wildcat.commands.OpenFile"
+      	name="Open File">
+      </command>
+      <command
+      	defaultHandler="edu.ksu.wildcat.handlers.Run"
+      	description="Runs input"
+      	id="edu.ksu.wildcat.commands.Run"
+      	name="Run Input">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:org.eclipse.ui.main.menu">
+         <menu
+               label="Menu">
+            <command
+                  commandId="edu.ksu.wildcat.commands.OpenFile"
+                  icon="icons/folder.png"
+                  label="Open File"
+                  tooltip="Open File">
+            </command>
+            <command
+                  commandId="edu.ksu.wildcat.commands.Run"
+                  label="Run">
+            </command>
+            <separator
+                  name="edu.ksu.wildcat.separator1"
+                  visible="true">
+            </separator>
+            <command
+                  commandId="org.eclipse.ui.file.exit"
+                  icon="icons/delete-2.png"
+                  label="Exit">
+            </command>
+         </menu>
+      </menuContribution>
+   </extension>
+
+</plugin>

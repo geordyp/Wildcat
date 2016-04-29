@@ -1,0 +1,42 @@
+WINDAM    01/01/2009synthetic
+OPTION    SIMPLE    BARESOIL  NOPS      INTERNAL  
+IEMODEL   2         0110.0000 0000.1100 100       0.0
+HYD       Qin = 0   .02       0         1V        
+          0         1         
+          .1        0         
+          12        0         
+ENDTABLE
+CRESTPRFL 
+          0         101       
+          100000    101       
+          100000    101       
+          104133    101       
+          104133    101       
+          204133    101       
+ENDTABLE
+STROUTE   101       0         ELEV
+STRUCTURE           
+                    0                   0                   
+                    10                  389.2               
+                    20                  3113.6              
+                    30                  10508.3             
+                    40                  24908.5             
+                    50                  48649.4             
+                    60                  84066.1             
+                    70                  133493.9            
+                    80                  199267.8            
+                    90                  283723.1            
+                    100                 389194.9            
+                    101                 400987.9            
+                    102                 413016.8            
+ENDTABLE
+UPSTREAM  3         .02
+DAMCREST  .1        .02                 
+DWNSTREAM 3         .02       
+CONDUIT   0.1       0.1       50        102066.5
+TAILWATER
+          0         0         
+          0         30000000  
+ENDTABLE
+OUTPUT    ALL
+ENDRUN

@@ -1,0 +1,28 @@
+# DAKOTA INPUT FILE - dakota_windam.in
+environment,
+  tabular_graphics_data
+
+method,
+  vector_parameter_study
+    final_point = 110 0.11
+    num_steps = 10
+
+model,
+  single
+
+variables,
+  continuous_design = 2
+    initial_point 80 0.01
+    descriptors 'Dw1' 'Kh1'
+
+interface,
+  system
+  analysis_driver = 'WinDam.bat'
+  parameters_file = 'params.in'
+  results_file = 'results.out'
+  file_save
+
+responses,
+  num_objective_functions = 1
+  no_gradients
+  no_hessians
