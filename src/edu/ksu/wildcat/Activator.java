@@ -19,13 +19,11 @@ public class Activator extends AbstractUIPlugin {
 	
 	public final static String WILDCAT_PARTITIONING = "___Wildcat__partitioning_____";
 	
-	private WildcatPartitionScanner fPartitionScanner;
+	private static WildcatPartitionScanner fPartitionScanner;
 	
-	public WildcatPartitionScanner getWildcatPartitionScanner() {
-		if (fPartitionScanner == null)
-			fPartitionScanner = new WildcatPartitionScanner();
-		return fPartitionScanner;
-	}
+	private static MyCodeScanner fCodeScanner;
+	
+	private static MyColorProvider fColorProvider;
 	
 	/**
 	 * The constructor
@@ -70,4 +68,30 @@ public class Activator extends AbstractUIPlugin {
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
 	}
+	
+	public static WildcatPartitionScanner getWildcatPartitionScanner() {
+		if (fPartitionScanner == null)
+			fPartitionScanner = new WildcatPartitionScanner();
+		return fPartitionScanner;
+	}
+	
+	public static MyCodeScanner getMyCodeScanner() {
+		if (fCodeScanner == null) {
+			if (fColorProvider == null) {
+				fColorProvider = new MyColorProvider();
+				fCodeScanner = new MyCodeScanner(fColorProvider);
+			}
+			else
+				fCodeScanner = new MyCodeScanner(fColorProvider);
+		}
+		return fCodeScanner;
+	}
+	
+	public static MyColorProvider getMyColorProvider() {
+		if (fColorProvider == null)
+			fColorProvider = new MyColorProvider();
+		return fColorProvider;
+	}
+	
+	
 }
