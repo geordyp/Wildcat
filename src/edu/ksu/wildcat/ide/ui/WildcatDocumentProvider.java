@@ -26,8 +26,8 @@ public class WildcatDocumentProvider extends FileDocumentProvider {
 		return document;
 	}
 	
-	@Override
-	protected IDocument createEmptyDocument() {
-		return new WildcatDocument();
-	}
+//	@Override
+//	protected IDocument createEmptyDocument() {
+//		return new WildcatDocument();
+//	}
 }

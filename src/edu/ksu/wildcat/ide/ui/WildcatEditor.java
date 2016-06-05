@@ -8,10 +8,10 @@ import org.eclipse.ui.editors.text.TextEditor;
 
 public class WildcatEditor extends TextEditor {
 	
-	public WildcatEditor() {
-		super();
-		setDocumentProvider(new WildcatDocumentProvider());
-	}
+//	public WildcatEditor() {
+//		super();
+//		setDocumentProvider(new WildcatDocumentProvider());
+//	}
 	
 	protected void initializeEditor() {
 		super.initializeEditor();
