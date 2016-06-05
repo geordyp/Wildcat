@@ -19,6 +19,14 @@
             id="edu.ksu.wildcat.perspective">
       </perspective>
    </extension>
+   <extension point="org.eclipse.ui.editors">
+   	  <editor
+   	  		id="edu.ksu.wildcat.ide.ui.WildcatEditor"
+   	  		class="edu.ksu.wildcat.ide.ui.WildcatEditor"
+   	  		extensions="in"
+   	  		name="Wildcat Editor">
+   	  </editor>
+   </extension>
    <extension
          point="org.eclipse.ui.commands">
       <command

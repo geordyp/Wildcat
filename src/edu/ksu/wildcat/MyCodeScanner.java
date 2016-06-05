@@ -1,10 +1,10 @@
 package edu.ksu.wildcat;
 
-import java.awt.List;
 import java.util.ArrayList;
 
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.rules.EndOfLineRule;
+import org.eclipse.jface.text.rules.IPredicateRule;
 import org.eclipse.jface.text.rules.IRule;
 import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
@@ -15,31 +15,29 @@ import org.eclipse.jface.text.rules.WordRule;
 
 public class MyCodeScanner extends RuleBasedScanner {
 	
-	private static String[] fgKeywords = {"environment", "method", "model", "variables", "interface", "responses"};
+	private static String[] fgKeywords = {"environment"};
 	
 	public MyCodeScanner(MyColorProvider provider) {
 		IToken keyword = new Token(
 				new TextAttribute(provider.getColor(MyColorProvider.MAIN_KEYWORDS)));
-		/*
 		IToken regularKeyword = new Token(
 				new TextAttribute(provider.getColor(MyColorProvider.REGULAR_KEYWORDS)));
 		IToken comment = new Token(
 				new TextAttribute(provider.getColor(MyColorProvider.COMMENTS)));
 		IToken string = new Token(
 				new TextAttribute(provider.getColor(MyColorProvider.STRING_VALUES)));
-		*/
 		IToken other = new Token(
 				new TextAttribute(provider.getColor(MyColorProvider.DEFAULT)));
 		
 		//ArrayList<IRule> rules = new ArrayList();
-		ArrayList rules = new ArrayList();
+		ArrayList<IRule> rules = new ArrayList<IRule>();
 		
 		// Add rule for single line comments
-		//rules.add(new EndOfLineRule("//", comment));
+		rules.add(new EndOfLineRule("#", comment));
 		
 		// Add rule for strings
-		//rules.add(new SingleLineRule("\"", "\"", string, '\\'));
-		//rules.add(new SingleLineRule("'", "'", string, '\\'));
+		rules.add(new SingleLineRule("\"", "\"", string, '\\'));
+		rules.add(new SingleLineRule("'", "'", string, '\\'));
 		
 		// Add generic whitespace rule
 		rules.add(new WhitespaceRule(new MyWhitespaceDetector()));

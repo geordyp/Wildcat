@@ -17,6 +17,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.EditorsUI;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 
+import edu.ksu.wildcat.ide.ui.WildcatEditor;
+
 public class FileOpen extends AbstractHandler implements IHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -29,7 +31,8 @@ public class FileOpen extends AbstractHandler implements IHandler {
 			try{
 				IFileStore fileStore = EFS.getStore( file.toURI() );
 				IEditorInput input = new FileStoreEditorInput(fileStore);
-				page.openEditor(input, EditorsUI.DEFAULT_TEXT_EDITOR_ID);
+				//page.openEditor(input, EditorsUI.DEFAULT_TEXT_EDITOR_ID);
+				page.openEditor(input, "edu.ksu.wildcat.ide.ui.WildcatEditor");
 			} catch (CoreException e){
 				e.printStackTrace();
 			}

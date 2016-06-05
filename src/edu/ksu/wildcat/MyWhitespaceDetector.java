@@ -7,7 +7,7 @@ public class MyWhitespaceDetector implements IWhitespaceDetector {
 	@Override
 	public boolean isWhitespace(char c) {
 
-		if (c == ' ') return true;
+		if (c == ' ' || c == '\t' || c == '\r' || c == '\n') return true;
 		else return false;
 	}
 }

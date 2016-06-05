@@ -4,6 +4,8 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import edu.ksu.wildcat.ide.ui.WildcatPartitionScanner;
+
 /**
  * The activator class controls the plug-in life cycle
  */
@@ -14,6 +16,16 @@ public class Activator extends AbstractUIPlugin {
 
 	// The shared instance
 	private static Activator plugin;
+	
+	public final static String WILDCAT_PARTITIONING = "___Wildcat__partitioning_____";
+	
+	private WildcatPartitionScanner fPartitionScanner;
+	
+	public WildcatPartitionScanner getWildcatPartitionScanner() {
+		if (fPartitionScanner == null)
+			fPartitionScanner = new WildcatPartitionScanner();
+		return fPartitionScanner;
+	}
 	
 	/**
 	 * The constructor
