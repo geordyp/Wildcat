@@ -57,6 +57,7 @@
             </command>
             <command
                   commandId="edu.ksu.wildcat.commands.Run"
+                  icon="icons/run.png"
                   label="Run">
             </command>
             <separator
@@ -65,8 +66,9 @@
             </separator>
             <command
                   commandId="org.eclipse.ui.file.exit"
-                  icon="icons/delete-2.png"
-                  label="Exit">
+                  icon="icons/exit.png"
+                  label="Exit"
+                  tooltip="Exit">
             </command>
          </menu>
       </menuContribution>
