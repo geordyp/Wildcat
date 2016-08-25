@@ -18,7 +18,7 @@ import org.eclipse.ui.editors.text.EditorsUI;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 
 /**
- * Handler for the 'Run' menu action which takes the given
+ * Handler for the "Run" menu action which takes the given
  * input file and runs it through Dakota
  * 
  * @author geordypaul
@@ -42,6 +42,7 @@ public class Run extends AbstractHandler implements IHandler {
 		String inputFilePath = path.toString();
 		
 		// Remove 'file:/' from the path
+		// TODO make sure the file extension is okay
 		inputFilePath = inputFilePath.substring(6);
 		
 		try {
