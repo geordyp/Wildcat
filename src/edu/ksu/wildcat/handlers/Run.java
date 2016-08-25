@@ -4,127 +4,117 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URI;
-import java.util.Scanner;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.filesystem.EFS;
-import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.editors.text.EditorsUI;
-import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 
+/**
+ * Handler for the run menu action which takes the given
+ * input file and runs it through Dakota
+ * 
+ * @author geordypaul
+ */
 public class Run extends AbstractHandler implements IHandler {
+	
+	/**
+	 * Executes with the map of parameter values by name
+	 * 
+	 * @param event - contains all the info about the current state of the app
+	 * @return - the result of the execution
+	 */
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		
-		IEditorInput input = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+		// Get the path of the current file
+		IEditorInput editorInput = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
 				.getActivePage().getActiveEditor().getEditorInput();
+		FileStoreEditorInput fileStore = (FileStoreEditorInput) editorInput;
+		URI path = fileStore.getURI();
+		String inputFilePath = path.toString();
 		
-		FileStoreEditorInput fileStore = (FileStoreEditorInput) input;
-		URI thing = fileStore.getURI();
-		String other = thing.toString();
-		other = other.substring(6);
+		// Remove 'file:/' from the path
+		inputFilePath = inputFilePath.substring(6);
 		
 		try {
-			File f = new File(other);
+            Process p = null;
+            
+            // Set the commands for the process
+            ProcessBuilder pb = new ProcessBuilder("dakota", inputFilePath);
+            
+            // Set the directory for the process
+            // TODO Get the directory path from the user
+            pb.directory(new File("C:/Users/geordypaul/Documents/Research/wildcat/edu.ksu.wildcat/process_dir"));
+            p = pb.start();
+            
+            // The output from the console
+            BufferedReader outputStream = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            
+            // The error from the console
+            BufferedReader errorStream = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+            	            	            
+            // Write the output stream to an output file
+            // TODO write to a better directory
+            PrintWriter pwOutput = new PrintWriter("output.txt");
+            toPrintWriter(pwOutput, outputStream);
+            
+            // Write the error stream to an error file
+            // TODO write to a better directory
+            PrintWriter pwError = new PrintWriter("error.txt");
+            toPrintWriter(pwError, errorStream);
+
+            p.waitFor();
 			
-	        //try {
-	            String line;
-	            /*
-	            Process p = null;
-	            ProcessBuilder pb = new ProcessBuilder("java", "Addition");
-	            pb.directory(new File("C:/Users/geordypaul/Documents/Research/wildcat/edu.ksu.wildcat/process_dir"));
-	            p = pb.start();
-	            */
-	            Process p = null;
-	            ProcessBuilder pb = new ProcessBuilder("dakota", other);
-	            System.out.println("user.dir: " + System.getProperty("user.dir"));
-	            System.out.println("old: " + pb.directory());
-	            pb.directory(new File("C:/Users/geordypaul/Documents/Research/wildcat/edu.ksu.wildcat/process_dir"));
-	            System.out.println("new: " + pb.directory());
-	            p = pb.start();
-	            //Process p = Runtime.getRuntime().exec("java Addition");
-	            //Process p = Runtime.getRuntime().exec("dakota " + other);
-	            //Process p = Runtime.getRuntime().exec("dakota dakota_input.in");
-	            BufferedReader bri = new BufferedReader(new InputStreamReader(p.getInputStream()));
-	            BufferedReader bre = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-	            
-	            StringBuilder consoleOutput = new StringBuilder();
-	            
-	            //PrintWriter pw = new PrintWriter("C:/Users/geordypaul/Desktop/output.txt");
-	            PrintWriter pw = new PrintWriter("output.txt");
-	            while ((line = bri.readLine()) != null) {
-	                //System.out.println(line);
-	            	consoleOutput.append(line + "\n");
-	            	pw.println(line);
-	            }
-	            bri.close();
-	            
-	            pw.close();
-	            PrintWriter pwError = new PrintWriter("error.txt");
-	            while ((line = bre.readLine()) != null) {
-	                pwError.println(line);
-	            	//System.out.println(line);
-	            }
-	            pwError.close();
-	            bre.close();
-	            p.waitFor();
-	            System.out.println("Process Finished");
-	        //}
-	        //catch (Exception e) {
-	            //System.out.println(e.toString());
-	            //e.printStackTrace();
-	        //}
-			
-			
-			
-			//Scanner s = new Scanner(f);
-			
-			//StringBuilder sb = new StringBuilder();
-			
-			//while (s.hasNext()) {
-				//sb.append(s.nextLine() + "\n");
-			//}
-			
-	        /*
-			IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
-			MessageDialog.openInformation(
-					window.getShell(), 
-					"Hello World!",
-					consoleOutput.toString());
-			*/
-	            
-			File file = new File("output.txt");
-			if( file!=null ){
+	        // Get the output file created by the PrintWriter
+			File outputFile = new File("output.txt");
+			if (outputFile != null) {
+				
+				// Get the workbench window
 				IWorkbenchPage page = PlatformUI.getWorkbench()
 						.getActiveWorkbenchWindow().getActivePage();
-				try{
-					IFileStore otherFileStore = EFS.getStore( file.toURI() );
-					IEditorInput otherInput = new FileStoreEditorInput(otherFileStore);
-					page.openEditor(otherInput, EditorsUI.DEFAULT_TEXT_EDITOR_ID);
+				try {
+					// Display the output file
+					// TODO display it as read-only
+					IEditorInput eiOutput = new FileStoreEditorInput(EFS.getStore(outputFile.toURI()));
+					page.openEditor(eiOutput, EditorsUI.DEFAULT_TEXT_EDITOR_ID);
 				} catch (CoreException e){
 					e.printStackTrace();
 				}
 			}
-			
-			//s.close();
 		}
 		catch (Exception e) {
-			
+			e.printStackTrace();
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * Takes the given BufferedReader and writes its contents
+	 * to the given PrintWriter
+	 * 
+	 * @param pw
+	 * @param stream
+	 */
+	private static void toPrintWriter(PrintWriter pw, BufferedReader stream) {
+        try {
+    		String line;
+            while ((line = stream.readLine()) != null) {
+            	pw.println(line);
+            }
+            stream.close();
+            pw.close();	
+        }
+        catch (Exception e) {
+        	e.printStackTrace();
+        }
 	}
 }
