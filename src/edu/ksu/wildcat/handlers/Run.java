@@ -18,7 +18,7 @@ import org.eclipse.ui.editors.text.EditorsUI;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 
 /**
- * Handler for the run menu action which takes the given
+ * Handler for the 'Run' menu action which takes the given
  * input file and runs it through Dakota
  * 
  * @author geordypaul
@@ -81,7 +81,7 @@ public class Run extends AbstractHandler implements IHandler {
 				IWorkbenchPage page = PlatformUI.getWorkbench()
 						.getActiveWorkbenchWindow().getActivePage();
 				try {
-					// Display the output file
+					// Open the file in the window
 					// TODO display it as read-only
 					IEditorInput eiOutput = new FileStoreEditorInput(EFS.getStore(outputFile.toURI()));
 					page.openEditor(eiOutput, EditorsUI.DEFAULT_TEXT_EDITOR_ID);

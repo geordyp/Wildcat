@@ -6,7 +6,6 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.filesystem.EFS;
-import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
@@ -14,44 +13,58 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.editors.text.EditorsUI;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 
-import edu.ksu.wildcat.ide.ui.WildcatEditor;
 
+/**
+ * Handler for the 'Open File' menu action which opens a file dialog
+ * for the user to select the file they want to open
+ * 
+ * @author geordypaul
+ */
 public class FileOpen extends AbstractHandler implements IHandler {
+	
+	/**
+	 * Executes with the map of parameter values by name
+	 * 
+	 * @param event - contains all the info about the current state of the app
+	 * @return - the result of the execution
+	 */
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		
-		
+		// Get the file the user wants to open
 		File file = openFile();
-		if( file!=null ){
+		if (file != null) {
+			// Get the workbench window
 			IWorkbenchPage page = PlatformUI.getWorkbench()
 					.getActiveWorkbenchWindow().getActivePage();
 			try{
-				IFileStore fileStore = EFS.getStore( file.toURI() );
-				IEditorInput input = new FileStoreEditorInput(fileStore);
-				//page.openEditor(input, EditorsUI.DEFAULT_TEXT_EDITOR_ID);
-				page.openEditor(input, "edu.ksu.wildcat.ide.ui.WildcatEditor");
+				// Open the file in the window
+				IEditorInput eiFile = new FileStoreEditorInput(EFS.getStore(file.toURI()));
+				page.openEditor(eiFile, "edu.ksu.wildcat.ide.ui.WildcatEditor");
 			} catch (CoreException e){
 				e.printStackTrace();
 			}
 		}
+		
 		return null;
 	}
 	
-	/** Show OpenFile dialog to select a file */
-	private File openFile(){
-		Shell shell = PlatformUI.getWorkbench()
+	/**
+	 * Show OpenFile dialog for the user to select a file
+	 */
+	private static File openFile() {
+		Shell s = PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow().getShell();
-		// opens dialog to select file
-		FileDialog dialog = new FileDialog(shell, SWT.OPEN);
+		
+		// Opens dialog to select file
+		FileDialog dialog = new FileDialog(s, SWT.OPEN);
 		dialog.setFilterExtensions(new String[]{"*.*"});
 		dialog.setFilterNames(new String[]{"All files"});
 		String fileSelected = dialog.open();
-		if( fileSelected!=null && fileSelected.length() > 0 ){
-			// Perform action, opens the file
-			System.out.println("Selected file: " + fileSelected);
+		
+		if (fileSelected != null && fileSelected.length() > 0) {
 			return new File(fileSelected);
 		}
 		return null;
