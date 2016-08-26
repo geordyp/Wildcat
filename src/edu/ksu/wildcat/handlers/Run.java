@@ -3,7 +3,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.URI;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -25,6 +24,8 @@ import org.eclipse.ui.ide.FileStoreEditorInput;
  */
 public class Run extends AbstractHandler implements IHandler {
 	
+	private IWorkbenchPage page;
+
 	/**
 	 * Executes with the map of parameter values by name
 	 * 
@@ -33,23 +34,22 @@ public class Run extends AbstractHandler implements IHandler {
 	 */
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		
+		page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+				
 		// Get the path of the current file
-		IEditorInput editorInput = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-				.getActivePage().getActiveEditor().getEditorInput();
+		IEditorInput editorInput = page.getActiveEditor().getEditorInput();
 		FileStoreEditorInput fileStore = (FileStoreEditorInput) editorInput;
-		URI path = fileStore.getURI();
-		String inputFilePath = path.toString();
+		String filePath = fileStore.getURI().toString();
 		
 		// Remove 'file:/' from the path
-		// TODO make sure the file extension is okay
-		inputFilePath = inputFilePath.substring(6);
+		// TODO make sure the file extension is *.in
+		filePath = filePath.substring(6);
 		
 		try {
             Process p = null;
             
             // Set the commands for the process
-            ProcessBuilder pb = new ProcessBuilder("dakota", inputFilePath);
+            ProcessBuilder pb = new ProcessBuilder("dakota", filePath);
             
             // Set the directory for the process
             // TODO Get the directory path from the user
@@ -77,10 +77,6 @@ public class Run extends AbstractHandler implements IHandler {
 	        // Get the output file created by the PrintWriter
 			File outputFile = new File("output.txt");
 			if (outputFile != null) {
-				
-				// Get the workbench window
-				IWorkbenchPage page = PlatformUI.getWorkbench()
-						.getActiveWorkbenchWindow().getActivePage();
 				try {
 					// Open the file in the window
 					// TODO display it as read-only
