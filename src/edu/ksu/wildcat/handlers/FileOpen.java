@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.editors.text.EditorsUI;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 
 
@@ -23,7 +24,9 @@ import org.eclipse.ui.ide.FileStoreEditorInput;
  * @author geordypaul
  */
 public class FileOpen extends AbstractHandler implements IHandler {
-	
+
+	private IWorkbenchPage page;
+
 	/**
 	 * Executes with the map of parameter values by name
 	 * 
@@ -32,17 +35,26 @@ public class FileOpen extends AbstractHandler implements IHandler {
 	 */
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		
-		// Get the file the user wants to open
+		page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+
 		File file = openFile();
 		if (file != null) {
-			// Get the workbench window
-			IWorkbenchPage page = PlatformUI.getWorkbench()
-					.getActiveWorkbenchWindow().getActivePage();
+			String[] filePath = file.toString().split("\\\\");
+			String fileName = filePath[filePath.length - 1];
+			String[] fileNameParts = fileName.split("\\.");
+			String extension = fileNameParts[fileNameParts.length - 1];
+			
 			try{
 				// Open the file in the window
+				// TODO only use this text editor if the file extension is *.in
 				IEditorInput eiFile = new FileStoreEditorInput(EFS.getStore(file.toURI()));
-				page.openEditor(eiFile, "edu.ksu.wildcat.ide.ui.WildcatEditor");
+				if (extension.equals("in")) {
+					// Use rich editor for *.in files
+					page.openEditor(eiFile, "edu.ksu.wildcat.ide.ui.WildcatEditor");					
+				}
+				else {
+					page.openEditor(eiFile, EditorsUI.DEFAULT_TEXT_EDITOR_ID);
+				}
 			} catch (CoreException e){
 				e.printStackTrace();
 			}
@@ -53,15 +65,16 @@ public class FileOpen extends AbstractHandler implements IHandler {
 	
 	/**
 	 * Show OpenFile dialog for the user to select a file
+	 * 
+	 * @return - the file selected to be opened
 	 */
-	private static File openFile() {
+	private File openFile() {
 		Shell s = PlatformUI.getWorkbench()
 				.getActiveWorkbenchWindow().getShell();
 		
-		// Opens dialog to select file
+		// Create open dialog to select file
 		FileDialog dialog = new FileDialog(s, SWT.OPEN);
 		dialog.setFilterExtensions(new String[]{"*.*"});
-		dialog.setFilterNames(new String[]{"All files"});
 		String fileSelected = dialog.open();
 		
 		if (fileSelected != null && fileSelected.length() > 0) {
