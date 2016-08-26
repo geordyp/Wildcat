@@ -42,10 +42,10 @@
       	name="Open File">
       </command>
       <command
-      	defaultHandler="edu.ksu.wildcat.handlers.FileOpen"
-      	description="Opens file"
-      	id="edu.ksu.wildcat.commands.OpenFile"
-      	name="Open File">
+      	defaultHandler="edu.ksu.wildcat.handlers.SaveAs"
+      	description="Saves file in specified directory"
+      	id="edu.ksu.wildcat.commands.SaveAs"
+      	name="Save As">
       </command>
       <command
       	defaultHandler="edu.ksu.wildcat.handlers.Run"
@@ -72,9 +72,9 @@
                   label="Open File">
             </command>
             <command
-                  commandId="edu.ksu.wildcat.commands.Save"
+                  commandId="edu.ksu.wildcat.commands.SaveAs"
                   icon="icons/save.png"
-                  label="Save">
+                  label="Save As...">
             </command>
             <separator
                   name="edu.ksu.wildcat.separator1"
