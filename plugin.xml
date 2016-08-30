@@ -90,7 +90,7 @@
             allPopups="false"
             locationURI="menu:org.eclipse.ui.main.menu">
          <menu
-               label="Menu">
+               label="File">
             <command
                   commandId="edu.ksu.wildcat.commands.NewFile"
                   icon="icons/new_file.png"
@@ -98,7 +98,6 @@
             </command>
             <command
                   commandId="edu.ksu.wildcat.commands.NewFileTemplate"
-                  icon="icons/new_file_template.png"
                   label="New File From Template">
             </command>
             <command
@@ -128,15 +127,6 @@
                   visible="true">
             </separator>
             <command
-                  commandId="edu.ksu.wildcat.commands.Run"
-                  icon="icons/run.png"
-                  label="Run">
-            </command>
-            <separator
-                  name="edu.ksu.wildcat.separator3"
-                  visible="true">
-            </separator>
-            <command
                   commandId="edu.ksu.wildcat.commands.CloseTab"
                   label="Close Tab">
             </command>
@@ -145,13 +135,21 @@
                   label="Close All Tabs">
             </command>1
             <separator
-                  name="edu.ksu.wildcat.separator4"
+                  name="edu.ksu.wildcat.separator3"
                   visible="true">
             </separator>
             <command
                   commandId="org.eclipse.ui.file.exit"
                   icon="icons/exit.png"
                   label="Exit">
+            </command>
+         </menu>
+         <menu
+         		label="Dakota">
+         	<command
+                  commandId="edu.ksu.wildcat.commands.Run"
+                  icon="icons/run.png"
+                  label="Run">
             </command>
          </menu>
       </menuContribution>
