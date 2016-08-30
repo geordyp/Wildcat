@@ -72,6 +72,12 @@
 	      	name="Close Tab">
       </command>
       <command
+	      	defaultHandler="edu.ksu.wildcat.handlers.menu.file.CloseAllTabs"
+	      	description="Closes all the tabs"
+	      	id="edu.ksu.wildcat.commands.CloseAllTabs"
+	      	name="Close All Tabs">
+      </command>
+      <command
 	      	defaultHandler="edu.ksu.wildcat.handlers.menu.dakota.Run"
 	      	description="Generates output"
 	      	id="edu.ksu.wildcat.commands.Run"
@@ -134,6 +140,10 @@
                   commandId="edu.ksu.wildcat.commands.CloseTab"
                   label="Close Tab">
             </command>
+            <command
+                  commandId="edu.ksu.wildcat.commands.CloseAllTabs"
+                  label="Close All Tabs">
+            </command>1
             <separator
                   name="edu.ksu.wildcat.separator4"
                   visible="true">
