@@ -77,6 +77,7 @@ public class NewFile extends AbstractHandler implements IHandler {
 		dialog.setText("New File");
 		dialog.setFilterNames(new String[] { "Dakota Input File (*.in)" });
 		dialog.setFilterExtensions(new String[]{"*.*"});
+		dialog.setOverwrite(true);
 		String fileSelected = dialog.open();
 
 		if (fileSelected != null && fileSelected.length() > 0) {
