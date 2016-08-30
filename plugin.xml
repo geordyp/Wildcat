@@ -31,9 +31,15 @@
          point="org.eclipse.ui.commands">
       <command
 			defaultHandler="edu.ksu.wildcat.handlers.menu.file.NewFile"
-			description="Create a new File"
+			description="Create a new file"
 			id="edu.ksu.wildcat.commands.NewFile"
 			name="New File">
+      </command>
+      <command
+			defaultHandler="edu.ksu.wildcat.handlers.menu.file.NewFileTemplate"
+			description="Create a new file from a template"
+			id="edu.ksu.wildcat.commands.NewFileTemplate"
+			name="New File From Template">
       </command>
       <command
 	      	defaultHandler="edu.ksu.wildcat.handlers.menu.file.OpenFile"
@@ -77,6 +83,11 @@
                   commandId="edu.ksu.wildcat.commands.NewFile"
                   icon="icons/new_file.png"
                   label="New File">
+            </command>
+            <command
+                  commandId="edu.ksu.wildcat.commands.NewFileTemplate"
+                  icon="icons/new_file_template.png"
+                  label="New File From Template">
             </command>
             <command
                   commandId="edu.ksu.wildcat.commands.OpenFile"
