@@ -73,6 +73,7 @@ public class OpenFile extends AbstractHandler implements IHandler {
 		
 		// Create open dialog to select file
 		FileDialog dialog = new FileDialog(s, SWT.OPEN);
+		dialog.setText("Open File");
 		dialog.setFilterExtensions(new String[]{"*.*"});
 		String fileSelected = dialog.open();
 		
