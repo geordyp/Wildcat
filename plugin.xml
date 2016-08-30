@@ -66,6 +66,12 @@
 	      	name="Save All">
       </command>
       <command
+	      	defaultHandler="edu.ksu.wildcat.handlers.menu.file.CloseTab"
+	      	description="Closes the active tab"
+	      	id="edu.ksu.wildcat.commands.CloseTab"
+	      	name="Close Tab">
+      </command>
+      <command
 	      	defaultHandler="edu.ksu.wildcat.handlers.menu.dakota.Run"
 	      	description="Generates output"
 	      	id="edu.ksu.wildcat.commands.Run"
@@ -122,6 +128,14 @@
             </command>
             <separator
                   name="edu.ksu.wildcat.separator3"
+                  visible="true">
+            </separator>
+            <command
+                  commandId="edu.ksu.wildcat.commands.CloseTab"
+                  label="Close Tab">
+            </command>
+            <separator
+                  name="edu.ksu.wildcat.separator4"
                   visible="true">
             </separator>
             <command
