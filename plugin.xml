@@ -30,40 +30,40 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
-      	defaultHandler="edu.ksu.wildcat.handlers.New"
-      	description="Create a new File"
-      	id="edu.ksu.wildcat.commands.New"
-      	name="New">
+			defaultHandler="edu.ksu.wildcat.handlers.NewFile"
+			description="Create a new File"
+			id="edu.ksu.wildcat.commands.NewFile"
+			name="New File">
       </command>
       <command
-      	defaultHandler="edu.ksu.wildcat.handlers.FileOpen"
-      	description="Opens file"
-      	id="edu.ksu.wildcat.commands.OpenFile"
-      	name="Open File">
+	      	defaultHandler="edu.ksu.wildcat.handlers.OpenFile"
+	      	description="Opens file dialog to open file"
+	      	id="edu.ksu.wildcat.commands.OpenFile"
+	      	name="Open File">
       </command>
       <command
-      	defaultHandler="edu.ksu.wildcat.handlers.Save"
-      	description="Saves file"
-      	id="edu.ksu.wildcat.commands.Save"
-      	name="Save">
+	      	defaultHandler="edu.ksu.wildcat.handlers.Save"
+	      	description="Saves the active file"
+	      	id="edu.ksu.wildcat.commands.Save"
+	      	name="Save">
       </command>
       <command
-      	defaultHandler="edu.ksu.wildcat.handlers.SaveAs"
-      	description="Saves file in specified directory"
-      	id="edu.ksu.wildcat.commands.SaveAs"
-      	name="Save As">
+	      	defaultHandler="edu.ksu.wildcat.handlers.SaveAs"
+	      	description="Opens file dialog to save file"
+	      	id="edu.ksu.wildcat.commands.SaveAs"
+	      	name="Save As">
       </command>
       <command
-      	defaultHandler="edu.ksu.wildcat.handlers.SaveAll"
-      	description="Save all the active files"
-      	id="edu.ksu.wildcat.commands.SaveAll"
-      	name="Save All">
+	      	defaultHandler="edu.ksu.wildcat.handlers.SaveAll"
+	      	description="Saves all the active files"
+	      	id="edu.ksu.wildcat.commands.SaveAll"
+	      	name="Save All">
       </command>
       <command
-      	defaultHandler="edu.ksu.wildcat.handlers.Run"
-      	description="Generates output"
-      	id="edu.ksu.wildcat.commands.Run"
-      	name="Run Input">
+	      	defaultHandler="edu.ksu.wildcat.handlers.Run"
+	      	description="Generates output"
+	      	id="edu.ksu.wildcat.commands.Run"
+	      	name="Run Input">
       </command>
    </extension>
    <extension
@@ -74,9 +74,9 @@
          <menu
                label="Menu">
             <command
-                  commandId="edu.ksu.wildcat.commands.New"
-                  icon="icons/new.png"
-                  label="New">
+                  commandId="edu.ksu.wildcat.commands.NewFile"
+                  icon="icons/new_file.png"
+                  label="New File">
             </command>
             <command
                   commandId="edu.ksu.wildcat.commands.OpenFile"

@@ -42,7 +42,7 @@ public class Run extends AbstractHandler implements IHandler {
 		String filePath = fileStore.getURI().toString();
 		
 		// Remove 'file:/' from the path
-		// TODO make sure the file extension is *.in
+		// TODO make sure the file extension is compatible
 		filePath = filePath.substring(6);
 		
 		try {
