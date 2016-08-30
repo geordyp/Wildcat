@@ -19,7 +19,7 @@ import org.eclipse.ui.editors.text.EditorsUI;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 
 /**
- * Handler for the "New" menu action which creates a new file
+ * Handler for the "New File" menu action which creates a new file
  *
  * @author geordypaul
  */
@@ -76,7 +76,7 @@ public class NewFile extends AbstractHandler implements IHandler {
 		dialog.setFileName("untitled");
 		dialog.setText("New File");
 		dialog.setFilterNames(new String[] { "Dakota Input File (*.in)" });
-		dialog.setFilterExtensions(new String[] { "." });
+		dialog.setFilterExtensions(new String[]{"*.*"});
 		String fileSelected = dialog.open();
 
 		if (fileSelected != null && fileSelected.length() > 0) {
