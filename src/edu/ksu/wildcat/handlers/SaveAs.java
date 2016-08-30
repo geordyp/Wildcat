@@ -22,7 +22,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 
 
 /**
- * Handler for the "Save As..." menu action which saves the current file
+ * Handler for the "Save As..." menu action which opens a save dialog
  *
  * @author geordypaul
  */
@@ -89,21 +89,36 @@ public class SaveAs extends AbstractHandler implements IHandler {
 		String fileSelected = dialog.open();
 
 		if (fileSelected != null && fileSelected.length() > 0) {
-			try {
-				// Copy the content in the editor into the file selected
-				final IEditorPart editorPart = page.getActiveEditor();
-			    if (!(editorPart instanceof ITextEditor)) return null;
-			    ITextEditor textEditor = (ITextEditor) editorPart;
-			    IDocument doc = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput());
-				PrintWriter newFile = new PrintWriter(fileSelected);
-				newFile.println(doc.get());
-				newFile.close();
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
+			IEditorPart editorPart = page.getActiveEditor();
+			
+			// The current path's format needs to match the selected path's format for comparison
+			String currentFile = fileStore.getURI().toString();
+			currentFile = currentFile.substring(6);
+			currentFile = currentFile.replace('/', '\\');
 
-			return new File(fileSelected);
+			// Just save the editor if a new file is not created
+			if (fileSelected.equals(currentFile)) {
+				page.saveEditor(editorPart, true);
+				
+				// The handler is finished if all we needed to do was save the current file
+				return null;
+			}
+			else {
+				try {
+					// Copy the content in the editor into the file selected
+				    if (!(editorPart instanceof ITextEditor)) return null;
+				    ITextEditor textEditor = (ITextEditor) editorPart;
+				    IDocument doc = textEditor.getDocumentProvider().getDocument(textEditor.getEditorInput());
+					PrintWriter newFile = new PrintWriter(fileSelected);
+					newFile.println(doc.get());
+					newFile.close();
+					
+					return new File(fileSelected);
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return null;
 	}
