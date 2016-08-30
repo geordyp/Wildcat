@@ -42,10 +42,22 @@
       	name="Open File">
       </command>
       <command
+      	defaultHandler="edu.ksu.wildcat.handlers.Save"
+      	description="Saves file"
+      	id="edu.ksu.wildcat.commands.Save"
+      	name="Save">
+      </command>
+      <command
       	defaultHandler="edu.ksu.wildcat.handlers.SaveAs"
       	description="Saves file in specified directory"
       	id="edu.ksu.wildcat.commands.SaveAs"
       	name="Save As">
+      </command>
+      <command
+      	defaultHandler="edu.ksu.wildcat.handlers.SaveAll"
+      	description="Save all the active files"
+      	id="edu.ksu.wildcat.commands.SaveAll"
+      	name="Save All">
       </command>
       <command
       	defaultHandler="edu.ksu.wildcat.handlers.Run"
@@ -71,13 +83,25 @@
                   icon="icons/folder.png"
                   label="Open File">
             </command>
-            <command
-                  commandId="edu.ksu.wildcat.commands.SaveAs"
-                  icon="icons/save.png"
-                  label="Save As...">
-            </command>
             <separator
                   name="edu.ksu.wildcat.separator1"
+                  visible="true">
+            </separator>
+            <command
+                  commandId="edu.ksu.wildcat.commands.Save"
+                  icon="icons/save.png"
+                  label="Save">
+            </command>
+            <command
+                  commandId="edu.ksu.wildcat.commands.SaveAs"
+                  label="Save As...">
+            </command>
+            <command
+                  commandId="edu.ksu.wildcat.commands.SaveAll"
+                  label="Save All">
+            </command>
+            <separator
+                  name="edu.ksu.wildcat.separator2"
                   visible="true">
             </separator>
             <command
@@ -86,7 +110,7 @@
                   label="Run">
             </command>
             <separator
-                  name="edu.ksu.wildcat.separator2"
+                  name="edu.ksu.wildcat.separator3"
                   visible="true">
             </separator>
             <command
