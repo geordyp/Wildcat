@@ -1,4 +1,4 @@
-package edu.ksu.wildcat.handlers;
+package edu.ksu.wildcat.handlers.menu.file;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;

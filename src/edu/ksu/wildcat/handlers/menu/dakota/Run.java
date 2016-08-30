@@ -1,4 +1,4 @@
-package edu.ksu.wildcat.handlers;
+package edu.ksu.wildcat.handlers.menu.dakota;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;

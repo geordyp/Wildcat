@@ -30,37 +30,37 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
-			defaultHandler="edu.ksu.wildcat.handlers.NewFile"
+			defaultHandler="edu.ksu.wildcat.handlers.menu.file.NewFile"
 			description="Create a new File"
 			id="edu.ksu.wildcat.commands.NewFile"
 			name="New File">
       </command>
       <command
-	      	defaultHandler="edu.ksu.wildcat.handlers.OpenFile"
+	      	defaultHandler="edu.ksu.wildcat.handlers.menu.file.OpenFile"
 	      	description="Opens file dialog to open file"
 	      	id="edu.ksu.wildcat.commands.OpenFile"
 	      	name="Open File">
       </command>
       <command
-	      	defaultHandler="edu.ksu.wildcat.handlers.Save"
+	      	defaultHandler="edu.ksu.wildcat.handlers.menu.file.Save"
 	      	description="Saves the active file"
 	      	id="edu.ksu.wildcat.commands.Save"
 	      	name="Save">
       </command>
       <command
-	      	defaultHandler="edu.ksu.wildcat.handlers.SaveAs"
+	      	defaultHandler="edu.ksu.wildcat.handlers.menu.file.SaveAs"
 	      	description="Opens file dialog to save file"
 	      	id="edu.ksu.wildcat.commands.SaveAs"
 	      	name="Save As">
       </command>
       <command
-	      	defaultHandler="edu.ksu.wildcat.handlers.SaveAll"
+	      	defaultHandler="edu.ksu.wildcat.handlers.menu.file.SaveAll"
 	      	description="Saves all the active files"
 	      	id="edu.ksu.wildcat.commands.SaveAll"
 	      	name="Save All">
       </command>
       <command
-	      	defaultHandler="edu.ksu.wildcat.handlers.Run"
+	      	defaultHandler="edu.ksu.wildcat.handlers.menu.dakota.Run"
 	      	description="Generates output"
 	      	id="edu.ksu.wildcat.commands.Run"
 	      	name="Run Input">
