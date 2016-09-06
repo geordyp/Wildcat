@@ -21,8 +21,9 @@ public class WordDetector implements IWordDetector {
 	public boolean isWordPart(char c) {
 
 		// ASCII values for capital and lower case letters
-		if ( (((int)c > 64) && ((int)c < 91)) || 
-				(((int)c > 96) && ((int)c < 123)) ) return true;
+		if ( ((int)c > 64 && (int)c < 91) || 
+				((int)c > 96 && (int)c < 123) ||
+				((int)c == 95) ) return true;
 		return false;
 	}
 
