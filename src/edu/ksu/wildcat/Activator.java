@@ -4,10 +4,12 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import edu.ksu.wildcat.ide.ui.WildcatPartitionScanner;
+//import edu.ksu.wildcat.ide.ui.WildcatPartitionScanner;
 
 /**
  * The activator class controls the plug-in life cycle
+ *
+ * @author geordypaul
  */
 public class Activator extends AbstractUIPlugin {
 
@@ -15,15 +17,11 @@ public class Activator extends AbstractUIPlugin {
 	public static final String PLUGIN_ID = "edu.ksu.wildcat"; //$NON-NLS-1$
 
 	// The shared instance
-	private static Activator plugin;
+	private static Activator plugin;	
 	
-	public final static String WILDCAT_PARTITIONING = "___Wildcat__partitioning_____";
+	private static CodeScanner _codeScanner;
 	
-	private static WildcatPartitionScanner fPartitionScanner;
-	
-	private static MyCodeScanner fCodeScanner;
-	
-	private static MyColorProvider fColorProvider;
+	private static ColorProvider _colorProvider;
 	
 	/**
 	 * The constructor
@@ -68,30 +66,30 @@ public class Activator extends AbstractUIPlugin {
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
 	}
-	
-	public static WildcatPartitionScanner getWildcatPartitionScanner() {
-		if (fPartitionScanner == null)
-			fPartitionScanner = new WildcatPartitionScanner();
-		return fPartitionScanner;
-	}
-	
-	public static MyCodeScanner getMyCodeScanner() {
-		if (fCodeScanner == null) {
-			if (fColorProvider == null) {
-				fColorProvider = new MyColorProvider();
-				fCodeScanner = new MyCodeScanner(fColorProvider);
-			}
-			else
-				fCodeScanner = new MyCodeScanner(fColorProvider);
+
+	/**
+	 * Get this plug-in's code scanner
+	 * 
+	 * @return CodeScanner - RuleBasedScanner
+	 */
+	public static CodeScanner getMyCodeScanner() {
+		if (_codeScanner == null) {
+			if (_colorProvider == null)
+				_colorProvider = new ColorProvider();
+			
+			_codeScanner = new CodeScanner(_colorProvider);
 		}
-		return fCodeScanner;
+		return _codeScanner;
 	}
 	
-	public static MyColorProvider getMyColorProvider() {
-		if (fColorProvider == null)
-			fColorProvider = new MyColorProvider();
-		return fColorProvider;
+	/**
+	 * Get this plug-in's color provider
+	 * 
+	 * @return ColorProvider - holds the colors for syntax highlighting
+	 */
+	public static ColorProvider getColorProvider() {
+		if (_colorProvider == null)
+			_colorProvider = new ColorProvider();
+		return _colorProvider;
 	}
-	
-	
 }
