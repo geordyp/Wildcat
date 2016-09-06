@@ -15,13 +15,13 @@ import org.eclipse.swt.widgets.Display;
 public class ColorProvider {
 	
 	// environment, method, model, variables, interface, responses
-	public static final RGB MAIN_KEYWORDS = new RGB(171, 73, 204);		// purple
+	public static final RGB MAIN_KEYWORDS = new RGB(100, 0, 200);		// purple
 	
 	// tabular_graphics_data, continuous_design, no_gradients, ...
-	public static final RGB REGULAR_KEYWORDS = new RGB(49, 39, 242);	// blue
+	public static final RGB REGULAR_KEYWORDS = new RGB(0, 0, 200);		// blue
 	
-	public static final RGB COMMENTS = new RGB(219, 230, 28);			// yellow
-	public static final RGB STRING_VALUES = new RGB(55, 219, 60);		// green
+	public static final RGB COMMENTS = new RGB(140, 180, 0);			// yellow
+	public static final RGB STRINGS = new RGB(0, 150, 0);				// green
 	public static final RGB DEFAULT = new RGB(0, 0, 0);					// black
 	
 	protected Map<RGB, Color> colorTable = new HashMap<RGB, Color>(10);
