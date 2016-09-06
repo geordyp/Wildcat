@@ -20,7 +20,8 @@ import org.eclipse.jface.text.rules.WordRule;
  */
 public class CodeScanner extends RuleBasedScanner {
 	
-	private static String[] _mainKeywords = {"environment"};
+	private static String[] _mainKeywords = {"environment", "method", "model", "variables", "interface", "responses"};
+	private static String[] _regularKeywords = {"tabular_graphics_data", "vector_parameter_study", "final_point", "num_steps", "single", "continuous_design", "initial_point", "descriptors", "system", "analysis_driver", "parameters_file", "results_file", "file_save", "num_objective_functions", "no_gradients", "no_hessians"};
 	
 	/**
 	 * Constructor
@@ -35,7 +36,7 @@ public class CodeScanner extends RuleBasedScanner {
 		IToken comment = new Token(
 				new TextAttribute(provider.getColor(ColorProvider.COMMENTS)));
 		IToken string = new Token(
-				new TextAttribute(provider.getColor(ColorProvider.STRING_VALUES)));
+				new TextAttribute(provider.getColor(ColorProvider.STRINGS)));
 		IToken other = new Token(
 				new TextAttribute(provider.getColor(ColorProvider.DEFAULT)));
 		
@@ -52,10 +53,12 @@ public class CodeScanner extends RuleBasedScanner {
 		// Add generic whitespace rule
 		rules.add(new WhitespaceRule(new WhitespaceDetector()));
 
-		// Add word rule for keywords
+		// Add word rule for main keywords
 		WordRule wordRule = new WordRule(new WordDetector(), other);
-		for (int i = 0; i< _mainKeywords.length; i++)
+		for (int i = 0; i < _mainKeywords.length; i++)
 			wordRule.addWord(_mainKeywords[i], keyword);
+		for (int i = 0; i < _regularKeywords.length; i++)
+			wordRule.addWord(_regularKeywords[i], regularKeyword);
 		rules.add(wordRule);
 		
 		IRule[] result = new IRule[rules.size()];
