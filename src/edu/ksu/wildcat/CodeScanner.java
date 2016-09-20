@@ -82,14 +82,20 @@ public class CodeScanner extends RuleBasedScanner {
 		List<String> regularKeywords = new ArrayList<String>();
 
 		try {
-			Scanner s = new Scanner(new File("C:/Users/geordypaul/Documents/Research/Wildcat/edu.ksu.wildcat/utility/dakota6.input.dictionary"));
+			Scanner s = new Scanner(new File("C:/Users/geordypaul/Documents/Research/Wildcat/edu.ksu.wildcat/utility/dakota.input.dictionary"));
 			while (s.hasNext()) {
 				String line = s.nextLine();
-				// remove "TAG "
-				line = line.substring(5);
+				// remove "KWD "
+				line = line.substring(4);
 				String[] words = line.split("/");
 				if (words.length == 1) {
 					mainKeywords.add(words[0]);
+				}
+				else if (words[words.length - 1].contains("ALIAS")) {
+					String[] aliases = words[words.length - 1].split(" ALIAS ");
+					for (int i = 0; i < aliases.length; i++) {
+						regularKeywords.add(aliases[i]);
+					}
 				}
 				else {
 					regularKeywords.add(words[words.length - 1]);					
