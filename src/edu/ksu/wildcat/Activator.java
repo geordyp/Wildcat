@@ -4,8 +4,12 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+//import edu.ksu.wildcat.ide.ui.WildcatPartitionScanner;
+
 /**
  * The activator class controls the plug-in life cycle
+ *
+ * @author geordypaul
  */
 public class Activator extends AbstractUIPlugin {
 
@@ -13,7 +17,11 @@ public class Activator extends AbstractUIPlugin {
 	public static final String PLUGIN_ID = "edu.ksu.wildcat"; //$NON-NLS-1$
 
 	// The shared instance
-	private static Activator plugin;
+	private static Activator plugin;	
+	
+	private static CodeScanner _codeScanner;
+	
+	private static ColorProvider _colorProvider;
 	
 	/**
 	 * The constructor
@@ -57,5 +65,31 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
+	}
+
+	/**
+	 * Get this plug-in's code scanner
+	 * 
+	 * @return CodeScanner - RuleBasedScanner
+	 */
+	public static CodeScanner getMyCodeScanner() {
+		if (_codeScanner == null) {
+			if (_colorProvider == null)
+				_colorProvider = new ColorProvider();
+			
+			_codeScanner = new CodeScanner(_colorProvider);
+		}
+		return _codeScanner;
+	}
+	
+	/**
+	 * Get this plug-in's color provider
+	 * 
+	 * @return ColorProvider - holds the colors for syntax highlighting
+	 */
+	public static ColorProvider getColorProvider() {
+		if (_colorProvider == null)
+			_colorProvider = new ColorProvider();
+		return _colorProvider;
 	}
 }

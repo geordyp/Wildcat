@@ -19,19 +19,69 @@
             id="edu.ksu.wildcat.perspective">
       </perspective>
    </extension>
+   <extension point="org.eclipse.ui.editors">
+   	  <editor
+   	  		id="edu.ksu.wildcat.ide.ui.WildcatEditor"
+   	  		class="edu.ksu.wildcat.ide.ui.WildcatEditor"
+   	  		extensions="in"
+   	  		name="Wildcat Editor">
+   	  </editor>
+   </extension>
    <extension
          point="org.eclipse.ui.commands">
       <command
-      	defaultHandler="edu.ksu.wildcat.handlers.FileOpen"
-      	description="Opens file"
-      	id="edu.ksu.wildcat.commands.OpenFile"
-      	name="Open File">
+			defaultHandler="edu.ksu.wildcat.handlers.menu.file.NewFile"
+			description="Create a new file"
+			id="edu.ksu.wildcat.commands.NewFile"
+			name="New File">
       </command>
       <command
-      	defaultHandler="edu.ksu.wildcat.handlers.Run"
-      	description="Runs input"
-      	id="edu.ksu.wildcat.commands.Run"
-      	name="Run Input">
+			defaultHandler="edu.ksu.wildcat.handlers.menu.file.NewFileTemplate"
+			description="Create a new file from a template"
+			id="edu.ksu.wildcat.commands.NewFileTemplate"
+			name="New File From Template">
+      </command>
+      <command
+	      	defaultHandler="edu.ksu.wildcat.handlers.menu.file.OpenFile"
+	      	description="Opens file dialog to open file"
+	      	id="edu.ksu.wildcat.commands.OpenFile"
+	      	name="Open File">
+      </command>
+      <command
+	      	defaultHandler="edu.ksu.wildcat.handlers.menu.file.Save"
+	      	description="Saves the active file"
+	      	id="edu.ksu.wildcat.commands.Save"
+	      	name="Save">
+      </command>
+      <command
+	      	defaultHandler="edu.ksu.wildcat.handlers.menu.file.SaveAs"
+	      	description="Opens file dialog to save file"
+	      	id="edu.ksu.wildcat.commands.SaveAs"
+	      	name="Save As">
+      </command>
+      <command
+	      	defaultHandler="edu.ksu.wildcat.handlers.menu.file.SaveAll"
+	      	description="Saves all the active files"
+	      	id="edu.ksu.wildcat.commands.SaveAll"
+	      	name="Save All">
+      </command>
+      <command
+	      	defaultHandler="edu.ksu.wildcat.handlers.menu.file.CloseTab"
+	      	description="Closes the active tab"
+	      	id="edu.ksu.wildcat.commands.CloseTab"
+	      	name="Close Tab">
+      </command>
+      <command
+	      	defaultHandler="edu.ksu.wildcat.handlers.menu.file.CloseAllTabs"
+	      	description="Closes all the tabs"
+	      	id="edu.ksu.wildcat.commands.CloseAllTabs"
+	      	name="Close All Tabs">
+      </command>
+      <command
+	      	defaultHandler="edu.ksu.wildcat.handlers.menu.dakota.Run"
+	      	description="Generates output"
+	      	id="edu.ksu.wildcat.commands.Run"
+	      	name="Run Input">
       </command>
    </extension>
    <extension
@@ -40,25 +90,66 @@
             allPopups="false"
             locationURI="menu:org.eclipse.ui.main.menu">
          <menu
-               label="Menu">
+               label="File">
+            <command
+                  commandId="edu.ksu.wildcat.commands.NewFile"
+                  icon="icons/new_file.png"
+                  label="New File">
+            </command>
+            <command
+                  commandId="edu.ksu.wildcat.commands.NewFileTemplate"
+                  label="New File From Template">
+            </command>
             <command
                   commandId="edu.ksu.wildcat.commands.OpenFile"
                   icon="icons/folder.png"
-                  label="Open File"
-                  tooltip="Open File">
-            </command>
-            <command
-                  commandId="edu.ksu.wildcat.commands.Run"
-                  label="Run">
+                  label="Open File">
             </command>
             <separator
                   name="edu.ksu.wildcat.separator1"
                   visible="true">
             </separator>
             <command
+                  commandId="edu.ksu.wildcat.commands.Save"
+                  icon="icons/save.png"
+                  label="Save">
+            </command>
+            <command
+                  commandId="edu.ksu.wildcat.commands.SaveAs"
+                  label="Save As...">
+            </command>
+            <command
+                  commandId="edu.ksu.wildcat.commands.SaveAll"
+                  label="Save All">
+            </command>
+            <separator
+                  name="edu.ksu.wildcat.separator2"
+                  visible="true">
+            </separator>
+            <command
+                  commandId="edu.ksu.wildcat.commands.CloseTab"
+                  label="Close Tab">
+            </command>
+            <command
+                  commandId="edu.ksu.wildcat.commands.CloseAllTabs"
+                  label="Close All Tabs">
+            </command>1
+            <separator
+                  name="edu.ksu.wildcat.separator3"
+                  visible="true">
+            </separator>
+            <command
                   commandId="org.eclipse.ui.file.exit"
-                  icon="icons/delete-2.png"
+                  icon="icons/exit.png"
                   label="Exit">
+            </command>
+         </menu>
+         <menu
+         		label="Dakota">
+         	<command
+                  commandId="edu.ksu.wildcat.commands.Run"
+                  icon="icons/run.png"
+                  label="Run">
             </command>
          </menu>
       </menuContribution>
