@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.rules.EndOfLineRule;
@@ -24,8 +26,9 @@ import org.eclipse.jface.text.rules.WordRule;
  */
 public class CodeScanner extends RuleBasedScanner {
 	
-	private static String[] _mainKeywords; // = {"environment", "method", "model", "variables", "interface", "responses"};
-	private static String[] _regularKeywords; // = {"tabular_graphics_data", "vector_parameter_study", "final_point", "num_steps", "single", "continuous_design", "initial_point", "descriptors", "system", "analysis_driver", "parameters_file", "results_file", "file_save", "num_objective_functions", "no_gradients", "no_hessians"};
+	private static String[] _mainKeywords;
+	private static String[] _regularKeywords;
+	private static Logger LOGGER;
 	
 	/**
 	 * Constructor
@@ -33,6 +36,8 @@ public class CodeScanner extends RuleBasedScanner {
 	 * @param provider - the color provider
 	 */
 	public CodeScanner(ColorProvider provider) {
+		LOGGER = Logger.getLogger( CodeScanner.class.getName() );
+		
 		IToken keyword = new Token(
 				new TextAttribute(provider.getColor(ColorProvider.MAIN_KEYWORDS)));
 		IToken regularKeyword = new Token(
@@ -61,7 +66,7 @@ public class CodeScanner extends RuleBasedScanner {
 			getKeywords();			
 		}
 		catch(Exception e) {
-			// TODO
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
 		}
 		
 		// Add word rule for main keywords
@@ -82,21 +87,25 @@ public class CodeScanner extends RuleBasedScanner {
 		List<String> regularKeywords = new ArrayList<String>();
 
 		try {
+			// TODO get this file path without hard coding
 			Scanner s = new Scanner(new File("C:/Users/geordypaul/Documents/Research/Wildcat/edu.ksu.wildcat/utility/dakota.input.dictionary"));
 			while (s.hasNext()) {
-				String line = s.nextLine();
-				// remove "KWD "
-				line = line.substring(4);
+				// remove "KWD " from the line
+				String line = s.nextLine().substring(4);
 				String[] words = line.split("/");
+				
+				// main keyword
 				if (words.length == 1) {
 					mainKeywords.add(words[0]);
 				}
+				// regular keyword with aliases
 				else if (words[words.length - 1].contains("ALIAS")) {
 					String[] aliases = words[words.length - 1].split(" ALIAS ");
 					for (int i = 0; i < aliases.length; i++) {
 						regularKeywords.add(aliases[i]);
 					}
 				}
+				// regular keyword without aliases
 				else {
 					regularKeywords.add(words[words.length - 1]);					
 				}
@@ -107,7 +116,7 @@ public class CodeScanner extends RuleBasedScanner {
 			s.close();
 		}
 		catch(Exception e) {
-			// TODO
+			LOGGER.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 
