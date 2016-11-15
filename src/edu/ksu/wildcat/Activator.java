@@ -1,10 +1,9 @@
 package edu.ksu.wildcat;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.text.ITextHover;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
-
-//import edu.ksu.wildcat.ide.ui.WildcatPartitionScanner;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -22,6 +21,8 @@ public class Activator extends AbstractUIPlugin {
 	private static CodeScanner _codeScanner;
 	
 	private static ColorProvider _colorProvider;
+	
+	private static JavaTextHover _javaTextHover;
 	
 	/**
 	 * The constructor
@@ -91,5 +92,16 @@ public class Activator extends AbstractUIPlugin {
 		if (_colorProvider == null)
 			_colorProvider = new ColorProvider();
 		return _colorProvider;
+	}
+	
+	/**
+	 * Get this plug-in's text hover
+	 * 
+	 * @return CodeScanner - RuleBasedScanner
+	 */
+	public static ITextHover getMyTextHover() {
+		if (_javaTextHover == null)
+			_javaTextHover = new JavaTextHover();
+		return _javaTextHover;
 	}
 }

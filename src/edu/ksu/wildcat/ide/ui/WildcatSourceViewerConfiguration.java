@@ -9,7 +9,6 @@ import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 
 import edu.ksu.wildcat.Activator;
-import edu.ksu.wildcat.JavaTextHover;
 
 /**
  * This class bundles the configuration space of a source viewer
@@ -36,6 +35,6 @@ public class WildcatSourceViewerConfiguration extends SourceViewerConfiguration 
 	}
 	
 	public ITextHover getTextHover(ISourceViewer sourceViewer, String contentType) {
-		return new JavaTextHover();
+		return Activator.getMyTextHover();
 	}
 }
