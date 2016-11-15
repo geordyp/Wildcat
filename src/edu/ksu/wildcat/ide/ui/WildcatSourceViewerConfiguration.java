@@ -1,6 +1,7 @@
  package edu.ksu.wildcat.ide.ui;
 
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.ITextHover;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.presentation.PresentationReconciler;
 import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
@@ -8,6 +9,7 @@ import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 
 import edu.ksu.wildcat.Activator;
+import edu.ksu.wildcat.JavaTextHover;
 
 /**
  * This class bundles the configuration space of a source viewer
@@ -31,5 +33,9 @@ public class WildcatSourceViewerConfiguration extends SourceViewerConfiguration 
 		reconciler.setRepairer(dr,  IDocument.DEFAULT_CONTENT_TYPE);
 		
 		return reconciler;
+	}
+	
+	public ITextHover getTextHover(ISourceViewer sourceViewer, String contentType) {
+		return new JavaTextHover();
 	}
 }
