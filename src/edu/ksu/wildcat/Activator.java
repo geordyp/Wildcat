@@ -1,5 +1,9 @@
 package edu.ksu.wildcat;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.text.ITextHover;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -23,6 +27,8 @@ public class Activator extends AbstractUIPlugin {
 	private static ColorProvider _colorProvider;
 	
 	private static JavaTextHover _javaTextHover;
+	
+	public static KeywordNode _keywordTree;
 	
 	/**
 	 * The constructor
@@ -67,6 +73,67 @@ public class Activator extends AbstractUIPlugin {
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
 	}
+	
+	/**
+	 * Get the list of keywords
+	 * 
+	 * @return _keywordTree - the tree of keywords
+	 */
+	private static KeywordNode getKeywordTree() {
+		if (_keywordTree == null) {
+			try {
+				Scanner s = new Scanner(new File("C:/Users/geordypaul/Documents/Research/Wildcat/edu.ksu.wildcat/utility/dakota.input.dictionary"));
+				
+				_keywordTree = new KeywordNode("root", null);
+				KeywordNode currNode;
+				KeywordNode parentNode;
+				
+				while (s.hasNext()) {
+					// example: KWD environment/tabular_data ALIAS tabular_graphics_data
+					
+					// remove KWD
+					String line = s.nextLine().substring(4);
+					// example: environment/tabular_data ALIAS tabular_graphics_data
+					
+					// grab individual keywords
+					String[] keywords = line.split("/");
+					// example: [environment, tabular_data ALIAS tabular_graphics_data]
+			        
+			        parentNode = _keywordTree;
+			        String keyword;
+			        ArrayList<String> aliases;
+			        for (int i = 0; i < keywords.length; i++) {
+			        	keyword = keywords[i];
+			        	aliases = null;
+			        	
+			        	// example: tabular_data ALIAS tabular_graphics_data
+			        	if (keyword.contains("ALIAS")) {
+			        		aliases = new ArrayList<String>();
+			        		String[] words = keywords[i].split(" ALIAS ");
+			        		
+			        		// start at 1 because the actual keyword is at 0
+			        		for (int j = 1; j < words.length; j++)
+			        			aliases.add(words[j]);
+
+			        		keyword = words[0];
+			        	}
+			        	currNode = parentNode.find(keyword);
+			            if (currNode == null)
+			            	parentNode.insert(keyword, aliases);
+			            else
+			            	parentNode = currNode;
+			        }
+				}
+				
+				s.close();
+			}
+			catch (Exception e) {
+				//TODO
+			}
+		}	
+			
+		return _keywordTree;
+	}
 
 	/**
 	 * Get this plug-in's code scanner
@@ -78,7 +145,7 @@ public class Activator extends AbstractUIPlugin {
 			if (_colorProvider == null)
 				_colorProvider = new ColorProvider();
 			
-			_codeScanner = new CodeScanner(_colorProvider);
+			_codeScanner = new CodeScanner(_colorProvider, getKeywordTree());
 		}
 		return _codeScanner;
 	}
@@ -97,7 +164,7 @@ public class Activator extends AbstractUIPlugin {
 	/**
 	 * Get this plug-in's text hover
 	 * 
-	 * @return CodeScanner - RuleBasedScanner
+	 * @return ITextHover
 	 */
 	public static ITextHover getMyTextHover() {
 		if (_javaTextHover == null)
