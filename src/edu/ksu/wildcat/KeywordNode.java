@@ -20,7 +20,7 @@ public class KeywordNode {
 		children.add(new KeywordNode(word, aliases));
 	}
 	
-	public KeywordNode find(String word) {
+	public KeywordNode findChild(String word) {
 		Iterator<KeywordNode> childNodes = children.iterator();
 		while (childNodes.hasNext()) {
 			KeywordNode curr = childNodes.next();

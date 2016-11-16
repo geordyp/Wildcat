@@ -29,7 +29,7 @@ public class CodeScanner extends RuleBasedScanner {
 	 * 
 	 * @param provider - the color provider
 	 */
-	public CodeScanner(ColorProvider provider, KeywordNode keywordTree) {
+	public CodeScanner(ColorProvider provider, ArrayList<String> mk, ArrayList<String> rk) {
 		
 		IToken keyword = new Token(
 				new TextAttribute(provider.getColor(ColorProvider.MAIN_KEYWORDS)));
@@ -42,8 +42,8 @@ public class CodeScanner extends RuleBasedScanner {
 		IToken other = new Token(
 				new TextAttribute(provider.getColor(ColorProvider.DEFAULT)));
 		
-		_mainKeywords = new ArrayList<String>();
-		_regularKeywords = new ArrayList<String>();
+		_mainKeywords = mk;
+		_regularKeywords = rk;
 		
 		//ArrayList<IRule> rules = new ArrayList();
 		ArrayList<IRule> rules = new ArrayList<IRule>();
@@ -57,8 +57,6 @@ public class CodeScanner extends RuleBasedScanner {
 		
 		// Add generic whitespace rule
 		rules.add(new WhitespaceRule(new WhitespaceDetector()));
-
-		getMainKeywords(keywordTree);
 
 		// Add word rule for main keywords
 		WordRule wordRule = new WordRule(new WordDetector(), other);
@@ -76,32 +74,5 @@ public class CodeScanner extends RuleBasedScanner {
 		IRule[] result = new IRule[rules.size()];
 		rules.toArray(result);
 		setRules(result);
-	}
-	
-	private static void getMainKeywords(KeywordNode keywordTree) {
-		Iterator<KeywordNode> mainKeywordNodes  = keywordTree.getChildren();
-		while (mainKeywordNodes.hasNext()) {
-			KeywordNode mainKeyword = mainKeywordNodes.next();
-			_mainKeywords.add(mainKeyword.getWord());
-			
-			Iterator<KeywordNode> children = mainKeyword.getChildren();
-			while (children.hasNext())
-				getRegularKeywords(children.next());
-			
-		}			
-	}
-	
-	private static void getRegularKeywords(KeywordNode keywordTreeNode) {
-		_regularKeywords.add(keywordTreeNode.getWord());
-		ArrayList<String> aliases = keywordTreeNode.getAliases();
-		if (aliases != null) {
-			for (String thing : aliases)
-				_regularKeywords.add(thing);
-			
-		}
-		
-		Iterator<KeywordNode> children = keywordTreeNode.getChildren();
-		while (children.hasNext())
-			getRegularKeywords(children.next());
 	}
 }

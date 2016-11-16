@@ -28,7 +28,11 @@ public class Activator extends AbstractUIPlugin {
 	
 	private static JavaTextHover _javaTextHover;
 	
-	public static KeywordNode _keywordTree;
+	private static KeywordNode _keywordTree;
+	
+	private static ArrayList<String> _mainKeywords;
+	
+	private static ArrayList<String> _regularKeywords;
 	
 	/**
 	 * The constructor
@@ -84,6 +88,8 @@ public class Activator extends AbstractUIPlugin {
 			try {
 				Scanner s = new Scanner(new File("C:/Users/geordypaul/Documents/Research/Wildcat/edu.ksu.wildcat/utility/dakota.input.dictionary"));
 				
+				_mainKeywords = new ArrayList<String>();
+				_regularKeywords = new ArrayList<String>();
 				_keywordTree = new KeywordNode("root", null);
 				KeywordNode currNode;
 				KeywordNode parentNode;
@@ -98,6 +104,9 @@ public class Activator extends AbstractUIPlugin {
 					// grab individual keywords
 					String[] keywords = line.split("/");
 					// example: [environment, tabular_data ALIAS tabular_graphics_data]
+					
+					if (keywords.length == 1)
+						_mainKeywords.add(keywords[0]);
 			        
 			        parentNode = _keywordTree;
 			        String keyword;
@@ -112,16 +121,21 @@ public class Activator extends AbstractUIPlugin {
 			        		String[] words = keywords[i].split(" ALIAS ");
 			        		
 			        		// start at 1 because the actual keyword is at 0
-			        		for (int j = 1; j < words.length; j++)
+			        		for (int j = 1; j < words.length; j++) {
 			        			aliases.add(words[j]);
+			        			_regularKeywords.add(words[j]);
+			        		}
 
 			        		keyword = words[0];
 			        	}
-			        	currNode = parentNode.find(keyword);
-			            if (currNode == null)
+			        	currNode = parentNode.findChild(keyword);
+			            if (currNode == null) {
 			            	parentNode.insert(keyword, aliases);
-			            else
+			            	_regularKeywords.add(keyword);
+			        	}
+			            else {
 			            	parentNode = currNode;
+			            }
 			        }
 				}
 				
@@ -134,6 +148,18 @@ public class Activator extends AbstractUIPlugin {
 			
 		return _keywordTree;
 	}
+	
+	public static ArrayList<String> getMainKeywords() {
+		if (_keywordTree == null)
+			_keywordTree = getKeywordTree();
+		return _mainKeywords;
+	}
+	
+	public static ArrayList<String> getRegularKeywords() {
+		if (_keywordTree == null)
+			_keywordTree = getKeywordTree();
+		return _regularKeywords;
+	}
 
 	/**
 	 * Get this plug-in's code scanner
@@ -145,7 +171,7 @@ public class Activator extends AbstractUIPlugin {
 			if (_colorProvider == null)
 				_colorProvider = new ColorProvider();
 			
-			_codeScanner = new CodeScanner(_colorProvider, getKeywordTree());
+			_codeScanner = new CodeScanner(_colorProvider, getMainKeywords(), getRegularKeywords());
 		}
 		return _codeScanner;
 	}
@@ -168,7 +194,7 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public static ITextHover getMyTextHover() {
 		if (_javaTextHover == null)
-			_javaTextHover = new JavaTextHover();
+			_javaTextHover = new JavaTextHover(getKeywordTree());
 		return _javaTextHover;
 	}
 }
