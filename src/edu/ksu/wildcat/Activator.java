@@ -104,9 +104,6 @@ public class Activator extends AbstractUIPlugin {
 					// grab individual keywords
 					String[] keywords = line.split("/");
 					// example: [environment, tabular_data ALIAS tabular_graphics_data]
-					
-					if (keywords.length == 1)
-						_mainKeywords.add(keywords[0]);
 			        
 			        parentNode = _keywordTree;
 			        String keyword;
@@ -131,7 +128,10 @@ public class Activator extends AbstractUIPlugin {
 			        	currNode = parentNode.findChild(keyword);
 			            if (currNode == null) {
 			            	parentNode.insert(keyword, aliases);
-			            	_regularKeywords.add(keyword);
+							if (keywords.length == 1)
+								_mainKeywords.add(keywords[0]);
+							else
+								_regularKeywords.add(keyword);
 			        	}
 			            else {
 			            	parentNode = currNode;
@@ -194,7 +194,7 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public static ITextHover getMyTextHover() {
 		if (_javaTextHover == null)
-			_javaTextHover = new JavaTextHover(getKeywordTree());
+			_javaTextHover = new JavaTextHover(getKeywordTree(), getMainKeywords());
 		return _javaTextHover;
 	}
 }
