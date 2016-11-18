@@ -24,7 +24,7 @@ public class KeywordNode {
 		Iterator<KeywordNode> childNodes = children.iterator();
 		while (childNodes.hasNext()) {
 			KeywordNode curr = childNodes.next();
-			if (curr.word.equals(word))
+			if (foundKeyword(curr, word))
 				return curr;
 		}	
 		return null;
@@ -40,5 +40,21 @@ public class KeywordNode {
 
 	public Iterator<KeywordNode> getChildren() {
 		return children.iterator();
+	}
+	
+	private boolean foundKeyword(KeywordNode node, String word) {
+		if (node.word.equals(word)) {
+			return true;
+		}
+		
+		if (node.aliases != null) {
+			Iterator<String> aliasList = node.aliases.iterator();
+			while (aliasList.hasNext()) {
+				if (aliasList.next().equals(word))
+					return true;
+			}
+		}
+		
+		return false;
 	}
 }
