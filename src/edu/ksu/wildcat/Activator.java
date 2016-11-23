@@ -20,20 +20,20 @@ public class Activator extends AbstractUIPlugin {
 	public static final String PLUGIN_ID = "edu.ksu.wildcat"; //$NON-NLS-1$
 
 	// The shared instance
-	private static Activator plugin;	
-	
+	private static Activator plugin;
+
 	private static CodeScanner _codeScanner;
-	
+
 	private static ColorProvider _colorProvider;
-	
+
 	private static JavaTextHover _javaTextHover;
-	
+
 	private static KeywordNode _keywordTree;
-	
+
 	private static ArrayList<String> _mainKeywords;
-	
+
 	private static ArrayList<String> _regularKeywords;
-	
+
 	/**
 	 * The constructor
 	 */
@@ -77,46 +77,46 @@ public class Activator extends AbstractUIPlugin {
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
 	}
-	
+
 	/**
 	 * Get the list of keywords
-	 * 
+	 *
 	 * @return _keywordTree - the tree of keywords
 	 */
 	private static KeywordNode getKeywordTree() {
 		if (_keywordTree == null) {
 			try {
 				Scanner s = new Scanner(new File("C:/Users/geordypaul/Documents/Research/Wildcat/edu.ksu.wildcat/utility/dakota.input.dictionary"));
-				
+
 				_mainKeywords = new ArrayList<String>();
 				_regularKeywords = new ArrayList<String>();
-				_keywordTree = new KeywordNode("root", null);
+				_keywordTree = new KeywordNode("root", null, null);
 				KeywordNode currNode;
 				KeywordNode parentNode;
-				
+
 				while (s.hasNext()) {
 					// example: KWD environment/tabular_data ALIAS tabular_graphics_data
-					
+
 					// remove KWD
 					String line = s.nextLine().substring(4);
 					// example: environment/tabular_data ALIAS tabular_graphics_data
-					
+
 					// grab individual keywords
 					String[] keywords = line.split("/");
 					// example: [environment, tabular_data ALIAS tabular_graphics_data]
-			        
+
 			        parentNode = _keywordTree;
 			        String keyword;
 			        ArrayList<String> aliases;
 			        for (int i = 0; i < keywords.length; i++) {
 			        	keyword = keywords[i];
 			        	aliases = null;
-			        	
+
 			        	// example: tabular_data ALIAS tabular_graphics_data
 			        	if (keyword.contains("ALIAS")) {
 			        		aliases = new ArrayList<String>();
 			        		String[] words = keywords[i].split(" ALIAS ");
-			        		
+
 			        		// start at 1 because the actual keyword is at 0
 			        		for (int j = 1; j < words.length; j++) {
 			        			aliases.add(words[j]);
@@ -127,7 +127,7 @@ public class Activator extends AbstractUIPlugin {
 			        	}
 			        	currNode = parentNode.findChild(keyword);
 			            if (currNode == null) {
-			            	parentNode.insert(keyword, aliases);
+			            	parentNode.insert(keyword, aliases, parentNode);
 							if (keywords.length == 1)
 								_mainKeywords.add(keywords[0]);
 							else
@@ -138,23 +138,23 @@ public class Activator extends AbstractUIPlugin {
 			            }
 			        }
 				}
-				
+
 				s.close();
 			}
 			catch (Exception e) {
 				//TODO
 			}
-		}	
-			
+		}
+
 		return _keywordTree;
 	}
-	
+
 	public static ArrayList<String> getMainKeywords() {
 		if (_keywordTree == null)
 			_keywordTree = getKeywordTree();
 		return _mainKeywords;
 	}
-	
+
 	public static ArrayList<String> getRegularKeywords() {
 		if (_keywordTree == null)
 			_keywordTree = getKeywordTree();
@@ -163,22 +163,22 @@ public class Activator extends AbstractUIPlugin {
 
 	/**
 	 * Get this plug-in's code scanner
-	 * 
+	 *
 	 * @return CodeScanner - RuleBasedScanner
 	 */
 	public static CodeScanner getMyCodeScanner() {
 		if (_codeScanner == null) {
 			if (_colorProvider == null)
 				_colorProvider = new ColorProvider();
-			
+
 			_codeScanner = new CodeScanner(_colorProvider, getMainKeywords(), getRegularKeywords());
 		}
 		return _codeScanner;
 	}
-	
+
 	/**
 	 * Get this plug-in's color provider
-	 * 
+	 *
 	 * @return ColorProvider - holds the colors for syntax highlighting
 	 */
 	public static ColorProvider getColorProvider() {
@@ -186,10 +186,10 @@ public class Activator extends AbstractUIPlugin {
 			_colorProvider = new ColorProvider();
 		return _colorProvider;
 	}
-	
+
 	/**
 	 * Get this plug-in's text hover
-	 * 
+	 *
 	 * @return ITextHover
 	 */
 	public static ITextHover getMyTextHover() {

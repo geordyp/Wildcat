@@ -13,7 +13,7 @@ import org.eclipse.swt.graphics.Point;
 
 public class JavaTextHover implements ITextHover {
 	private KeywordNode _keywordTree;
-	
+
 	public JavaTextHover(KeywordNode kt, ArrayList<String> mk) {
 		super();
 		_keywordTree = kt;
@@ -38,7 +38,7 @@ public class JavaTextHover implements ITextHover {
 				Stack<String> keywordPath = new Stack<String>();
 				for (int i = (lines.length - 1); i >= 0; i--) {
 					// disregard comments
-					if (lines[i].charAt(0) != '#') {	
+					if (lines[i].charAt(0) != '#') {
 						String[] words = lines[i].split(",|\\s+");
 						for (int j = (words.length - 1); j >= 0; j--) {
 							// disregard empty strings, numbers, and quoted strings
@@ -52,7 +52,7 @@ public class JavaTextHover implements ITextHover {
 							}
 						}
 					}
-					
+
 					if (!visitedNodes.isEmpty()) {
 						// pop the main keyword off the stack
 						keywordPath.pop();
@@ -74,7 +74,7 @@ public class JavaTextHover implements ITextHover {
 						}
 						// the selection node will be at the top of the stack
 						KeywordNode selectedNode = visitedNodes.pop();
-						return selectedNode.getWord();
+						return selectedNode.getHoverText();
 					}
 				}
 			} catch (BadLocationException x) {
@@ -82,7 +82,7 @@ public class JavaTextHover implements ITextHover {
 		}
 		return "empty";
 	}
-	
+
 	@Override
 	public IRegion getHoverRegion(ITextViewer textViewer, int offset) {
 		Point selection = textViewer.getSelectedRange();
@@ -90,18 +90,18 @@ public class JavaTextHover implements ITextHover {
 			return new Region(selection.x, selection.y);
 		return new Region(offset, 0);
 	}
-	
-	private boolean isNumeric(String str)  {  
+
+	private boolean isNumeric(String str)  {
 		try  {
 			double d = Double.parseDouble(str);
 		}
 		catch (NumberFormatException nfe) {
 			return false;
-		}  
-		
-		return true;  
+		}
+
+		return true;
 	}
-	
+
 	private boolean isQuotedString(String str) {
 		if (str.charAt(0) == '\'' || str.charAt(0) == '\"') {
 			return true;
