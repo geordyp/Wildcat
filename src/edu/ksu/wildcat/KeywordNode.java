@@ -124,19 +124,27 @@ public class KeywordNode {
 		}
 
 		// add parent info
-		String spaces = "";
+		String tabs = "";
 		while (!parents.isEmpty()) {
 			KeywordNode node = parents.pop();
-			hoverText.append(spaces + node.keyword + ": " + node.description + "\n");
-			spaces += " ";
+			hoverText.append(tabs + node.keyword + ": " + node.description + "\n");
+			tabs += "\t";
 		}
 
+		if (!getParent().getKeyword().equals("root")) {
+			hoverText.append("\n");
+		}
+		
 		// add keyword info
-		hoverText.append(spaces + keyword + ": " + description + "\n" +
-										 parameter + "\n");
+		if (parameter != ""){
+			hoverText.append(tabs + keyword + " (" + parameter + ")" + ": " + description + "\n");
+		}
+		else {
+			hoverText.append(tabs + keyword + ": " + description + "\n");
+		}
 
 		// add children info
-		hoverText.append(children.size() + "subelements:\n");
+		hoverText.append("\n" + children.size() + " subelements:\n");
 		Iterator<KeywordNode> childNodes = children.iterator();
 		int count = 1;
 		while (childNodes.hasNext()) {
