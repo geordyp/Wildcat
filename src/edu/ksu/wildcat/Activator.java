@@ -86,63 +86,78 @@ public class Activator extends AbstractUIPlugin {
 	private static KeywordNode getKeywordTree() {
 		if (_keywordTree == null) {
 			try {
-				Scanner s = new Scanner(new File("C:/Users/geordypaul/Documents/Research/Wildcat/edu.ksu.wildcat/utility/dakota.input.dictionary"));
+				Scanner dictionScanner = new Scanner(new File("C:/Users/geordypaul/Documents/Research/Wildcat/edu.ksu.wildcat/utility/dakota.input.dictionary"));
 
 				_mainKeywords = new ArrayList<String>();
 				_regularKeywords = new ArrayList<String>();
-				_keywordTree = new KeywordNode("root", null, null);
-				KeywordNode currNode;
-				KeywordNode parentNode;
+				_keywordTree = new KeywordNode("root", null, null, null, null);
 
-				while (s.hasNext()) {
-					// example: KWD environment/tabular_data ALIAS tabular_graphics_data
+				String kywd = dictionScanner.nextLine();
+				while (dictionScanner.hasNext()) {
+					String desc = "";
+					String param = "";
+					String line = dictionScanner.nextLine();
+					while (!line.contains("KYWD")) {
+						if (line.contains("DESC")) {
+							desc = line.substring(6);
+						}
+						else if (line.contains("PARAM")) {
+							param = line.substring(7);
+						}
+						line = dictionScanner.nextLine();
+					}
+					
+					// outside the loop, line holds the next kewyord
 
-					// remove KWD
-					String line = s.nextLine().substring(4);
-					// example: environment/tabular_data ALIAS tabular_graphics_data
-
+					// remove KYWD
+					kywd = kywd.substring(5);
 					// grab individual keywords
-					String[] keywords = line.split("/");
-					// example: [environment, tabular_data ALIAS tabular_graphics_data]
+					String[] keywords = kywd.split("/");
 
-			        parentNode = _keywordTree;
-			        String keyword;
-			        ArrayList<String> aliases;
-			        for (int i = 0; i < keywords.length; i++) {
-			        	keyword = keywords[i];
-			        	aliases = null;
+					// create keyword node with kywd, desc, and param
+					// set parent to root
+					KeywordNode parentNode = _keywordTree;
+					for (int i = 0; i < keywords.length; i++) {
+						String keyword = keywords[i];
+						ArrayList<String> aliases = null;
 
-			        	// example: tabular_data ALIAS tabular_graphics_data
-			        	if (keyword.contains("ALIAS")) {
-			        		aliases = new ArrayList<String>();
-			        		String[] words = keywords[i].split(" ALIAS ");
+						if (keyword.contains("ALIAS")) {
+							aliases = new ArrayList<String>();
+							String[] words = keywords[i].split(" ALIAS ");
 
-			        		// start at 1 because the actual keyword is at 0
-			        		for (int j = 1; j < words.length; j++) {
-			        			aliases.add(words[j]);
-			        			_regularKeywords.add(words[j]);
-			        		}
+							// start at 1 because the actual keyword is at 0
+							for (int j = 1; j < words.length; j++) {
+								aliases.add(words[j]);
+								_regularKeywords.add(words[j]);
+							}
 
-			        		keyword = words[0];
-			        	}
-			        	currNode = parentNode.findChild(keyword);
-			            if (currNode == null) {
-			            	parentNode.insert(keyword, aliases, parentNode);
-							if (keywords.length == 1)
+							// without this keyword could be set to "[word] ALIAS [word]"
+							keyword = words[0];
+						}
+
+						KeywordNode currNode = parentNode.findChild(keyword);
+						if (currNode == null) {
+							parentNode.insert(keyword, desc, param, aliases, parentNode);
+							if (keywords.length == 1) {
 								_mainKeywords.add(keywords[0]);
-							else
+							}
+							else {
 								_regularKeywords.add(keyword);
-			        	}
-			            else {
-			            	parentNode = currNode;
-			            }
-			        }
+							}
+						}
+						else {
+							parentNode = currNode;
+						}
+					}
+
+					// set kywd to the next kywd
+					kywd = line;
 				}
 
-				s.close();
+				dictionScanner.close();
 			}
 			catch (Exception e) {
-				//TODO
+				System.out.println(e.toString());
 			}
 		}
 
